@@ -44,7 +44,9 @@ from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
 auth = Auth(db)
 crud, service, plugins = Crud(db), Service(), PluginManager()
 
-## create all tables needed by auth if not custom tables
+auth.settings.extra_fields['auth_user'] = [
+    Field('employer'),
+]
 auth.define_tables(username=False, signature=False)
 
 ## configure email
@@ -83,7 +85,37 @@ use_janrain(auth, filename='private/janrain.key')
 ## after defining tables, uncomment below to enable auditing
 # auth.enable_record_versioning(db)
 
-db.define_table('proposal', Field('name', 'string', requires=[IS_NOT_EMPTY(), IS_NOT_IN_DB(db, 'proposal.name')]))
-db.define_table('file_', Field('name', 'string', requires=[IS_NOT_EMPTY(), IS_NOT_IN_DB(db, 'file_.name')]))
-db.define_table('proposal_file', Field('pid', 'reference proposal'), Field('fid', 'reference file_'))
+db.define_table(
+    'proposal',
+    Field('title', requires=[IS_NOT_EMPTY()]),
+    Field('funding_agency', requires=[IS_NOT_EMPTY()]),
+    Field('due_date', 'date', requires=[IS_NOT_EMPTY()]),
+)
+
+db.define_table(
+    'investigator',
+    Field('first_name', requires=[IS_NOT_EMPTY()]),
+    Field('last_name', requires=[IS_NOT_EMPTY()]),
+    Field('organization', requires=[IS_NOT_EMPTY()]),
+    Field('email', requires=[IS_NOT_EMPTY()]),
+    Field('checklist', 'integer') # bitmap. That 1 << i is 1 means db.checklist's record that id=i is checked.
+)
+
+db.define_table(
+    'proposal_investigator',
+    Field('pid', 'reference proposal'),
+    Field('rid', 'reference investigator'),
+)
+
+db.define_table(
+    'checklist',
+    Field('name', unique=True, requires=[IS_NOT_EMPTY(), IS_NOT_IN_DB(db, 'checklist.name')]),
+)
+
+if len(db().select(db.checklist.ALL)) == 0:
+    db.checklist.insert(name='Cover Page')
+    db.checklist.insert(name='Data Sheet')
+    db.checklist.insert(name='Narrative')
+    db.checklist.insert(name='Resume')
+
 crud.settings.auth = auth
