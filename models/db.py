@@ -87,24 +87,13 @@ use_janrain(auth, filename='private/janrain.key')
 
 db.define_table(
     'proposal',
-    Field('title', requires=[IS_NOT_EMPTY()]),
-    Field('funding_agency', requires=[IS_NOT_EMPTY()]),
-    Field('due_date', 'date', requires=[IS_NOT_EMPTY()]),
-)
-
-db.define_table(
-    'investigator',
-    Field('first_name', requires=[IS_NOT_EMPTY()]),
-    Field('last_name', requires=[IS_NOT_EMPTY()]),
-    Field('organization', requires=[IS_NOT_EMPTY()]),
-    Field('email', requires=[IS_NOT_EMPTY()]),
-    Field('checklist', 'integer') # bitmap. That 1 << i is 1 means db.checklist's record that id=i is checked.
-)
-
-db.define_table(
-    'proposal_investigator',
-    Field('pid', 'reference proposal'),
-    Field('rid', 'reference investigator'),
+    Field('owner_', 'reference auth_user', requires=[IS_NOT_EMPTY()]),
+    Field('title', label='Proposal Title', requires=[IS_NOT_EMPTY()]),
+    #Field('funding_agency', requires=IS_IN_SET(['NIH', 'NSF', 'DARPA'], zero='Choose one')),
+    Field('funding_agency'),
+    Field('due_date', 'datetime', requires=[IS_NOT_EMPTY(), IS_DATETIME()]),
+    Field('investigators'),
+    Field('checklist'),
 )
 
 db.define_table(
