@@ -1,6 +1,5 @@
 {{extend 'layout.html'}}
-
-<h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
+<h3>Account Settings</h3>
 <div id="web2py_user_form">
 {{
 if request.args(0)=='login':
@@ -22,4 +21,4 @@ jQuery("#web2py_user_form input:visible:enabled:first").focus();
     web2py_validate_entropy(jQuery('#no_table_new_password'),100);
 {{pass}}
 //--></script>
-
+<a style="margin-left:93px;" href="GrantProposal/default/user/change_password?_next=/GrantProposal/default/index">Reset Password</a>

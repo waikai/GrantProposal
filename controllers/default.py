@@ -12,6 +12,10 @@ def user():
     form = auth()
     return dict(locals())
 
+def display_form():
+    form=FORM('Your name:', INPUT(_name='name'), INPUT(_type='submit'))
+    return dict(form=form)
+
 def create_proposal():
     if not auth.is_logged_in():
         redirect(URL('user/login'))
@@ -33,7 +37,25 @@ def create_proposal():
 
     # Requires 'title', 'funding_agency', 'due_date' as strings.
     # Optionally requires first_name, last_name, organization and email as investigator information.
-    return dict()
+
+    '''
+    form1=FORM('Proposal title:', 
+                INPUT(_name='title'),
+                INPUT(_name='funding_agency'),
+                INPUT(_type='submit'))
+    '''
+    form1=SQLFORM(db.proposal)
+
+    '''
+    if form1.process().accepted:
+        response.flash = 'form accepted'
+    elif form1.errors:
+        response.flash = 'form has errors'
+    else:
+        response.flash = 'please fill out the form'
+    '''
+
+    return dict(form1=form1)
 
 def update_proposal():
     if not auth.is_logged_in():

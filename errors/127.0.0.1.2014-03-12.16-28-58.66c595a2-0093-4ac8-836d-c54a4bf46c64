@@ -1,0 +1,21 @@
+(dp1
+S'output'
+p2
+S"<type 'exceptions.NameError'> global name 'form' is not defined"
+p3
+sS'layer'
+p4
+S'/home/nexus/documents/web2py-master/applications/GrantProposal/controllers/default.py'
+p5
+sS'code'
+p6
+S"# -*- coding: utf-8 -*-\n\nimport json\nfrom gluon.storage import Storage\n\ndef index():\n    if not auth.is_logged_in(): # more permission checking in the future\n        redirect(URL('user/login'))\n    return dict(locals())\n\ndef user():\n    form = auth()\n    return dict(locals())\n\ndef display_form():\n    form=FORM('Your name:', INPUT(_name='name'), INPUT(_type='submit'))\n    return dict(form=form)\n\ndef create_proposal():\n    if not auth.is_logged_in():\n        redirect(URL('user/login'))\n\n    rows = db(db.proposal.owner_ == auth.user.id).select(db.proposal.ALL).as_list()\n    if len(rows) > 0:\n        # FIXME For now, only one proposal is permitted for each user.\n        redirect(URL('index'))\n\n    if request.env.request_method == 'POST':\n        # We have multiple investigators, and the view writer can just set multiple input entry with name, say, 'first_name'. All inputs will form a Python list in the request object.\n        _vars = request.vars\n        _vars.owner_ = auth.user.id\n        _vars.investigators = json.dumps(zip(_vars.first_name or [], _vars.last_name or [], _vars.organization or [], _vars.email or []))\n        _vars.checklist = json.dumps([])\n        _vars = { (k, getattr(_vars, k)) for k in _vars if k in db.proposal.fields and k != 'id' }\n        db.proposal.insert(**_vars)\n        redirect(URL('index'))\n\n    # Requires 'title', 'funding_agency', 'due_date' as strings.\n    # Optionally requires first_name, last_name, organization and email as investigator information.\n\n    '''\n    form1=FORM('Proposal title:', \n                INPUT(_name='title'),\n                INPUT(_name='funding_agency'),\n                INPUT(_type='submit'))\n    '''\n    form1=SQLFORM(db.proposal)\n\n    if form.process().accepted:\n        response.flash = 'form accepted'\n    elif form.errors:\n        response.flash = 'form has errors'\n    else:\n        response.flash = 'please fill out the form'\n\n\n    return dict(form1=form1)\n\ndef update_proposal():\n    if not auth.is_logged_in():\n        redirect(URL('user/login'))\n\n    rows = db(db.proposal.owner_ == auth.user.id).select(db.proposal.ALL)\n    if len(rows) == 0:\n        redirect(URL('index'))\n    _vars = Storage(rows[0])\n\n    if request.env.request_method == 'POST':\n        _vars = request.vars\n        _vars.investigators = json.dumps(zip(_vars.first_name or [], _vars.last_name or [], _vars.organization or [], _vars.email or []))\n        _vars.checklist = json.dumps([])\n        _vars = { (k, getattr(_vars, k)) for k in _vars if k in db.proposal.fields and k != 'id' }\n        db(db.proposal.id == row['id']).update(**_vars)\n        redirect(URL('index'))\n\n    investigators = json.loads(_vars.investigators)\n    s = set(json.loads(_vars.checklist))\n    _vars.checklist = s\n    _vars.investigators = None\n    _vars.first_name = [ x[0] for x in investigators ]\n    _vars.last_name = [ x[1] for x in investigators ]\n    _vars.organization = [ x[2] for x in investigators ]\n    _vars.email = [ x[3] for x in investigators ]\n\n    # The view writer needs vars for initial values.\n    # print(_vars) for details\n    return dict(_vars = _vars)\n\nresponse._vars=response._caller(create_proposal)\n"
+p7
+sS'snapshot'
+p8
+(dp9
+sS'traceback'
+p10
+S'Traceback (most recent call last):\n  File "/home/nexus/documents/web2py-master/gluon/restricted.py", line 217, in restricted\n    exec ccode in environment\n  File "/home/nexus/documents/web2py-master/applications/GrantProposal/controllers/default.py", line 89, in <module>\n  File "/home/nexus/documents/web2py-master/gluon/globals.py", line 385, in <lambda>\n    self._caller = lambda f: f()\n  File "/home/nexus/documents/web2py-master/applications/GrantProposal/controllers/default.py", line 49, in create_proposal\n    if form.process().accepted:\nNameError: global name \'form\' is not defined\n'
+p11
+s.
