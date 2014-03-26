@@ -87,15 +87,29 @@ use_janrain(auth, filename='private/janrain.key')
 
 db.define_table(
     'proposal',
-    Field('owner_', 'reference auth_user', requires=[IS_NOT_EMPTY()]),
+    Field('owner_', db.auth_user),
     Field('title', label='Proposal Title', requires=[IS_NOT_EMPTY()]),
     Field('funding_agency', requires=IS_IN_SET(['NIH', 'NSF', 'DARPA'], zero='Choose one')),
-#    Field('funding_agency'),
+#    Field('due_date', 'datetime', default = request.now, requires = IS_DATE(format=('%d-%m-%Y'))), 
     Field('due_date', 'datetime', requires=[IS_NOT_EMPTY(), IS_DATETIME()]),
     Field('investigators'),
-    Field('checklist'),
+#    Field('checklist'),
+    Field('cover_page', requires=IS_IN_SET(['submitted'], zero='not submitted')),
+    Field('data_sheet', requires=IS_IN_SET(['submitted'], zero='not submitted')),
+    Field('narrative', requires=IS_IN_SET(['submitted'], zero='not submitted')),
+    Field('resume', requires=IS_IN_SET(['submitted'], zero='not submitted'))
 )
-
+'''
+# Dan's uncool table
+db.define_table(
+    'checklist'
+    Field('owner_', db.auth_user),
+    Field('cover_page', default='Cover Page'),
+    Field('data_sheet', default='Data Sheet'),
+    Field('narrative', default='Narrative'),
+    Field('resume', default='Resume')
+)
+# Tim's original below
 db.define_table(
     'checklist',
     Field('name', unique=True, requires=[IS_NOT_EMPTY(), IS_NOT_IN_DB(db, 'checklist.name')]),
@@ -106,5 +120,6 @@ if len(db().select(db.checklist.ALL)) == 0:
     db.checklist.insert(name='Data Sheet')
     db.checklist.insert(name='Narrative')
     db.checklist.insert(name='Resume')
+'''
 
 crud.settings.auth = auth
