@@ -1,0 +1,7 @@
+*.pyc
+sessions/*
+databases/*
+errors/*
+languages/*
+.pythonhistory
+*.swp
