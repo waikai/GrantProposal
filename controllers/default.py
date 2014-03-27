@@ -27,8 +27,8 @@ def create_proposal():
 
 #    db.proposal.owner_.writable = False
 #    db.proposal.owner_.readable = False
-    db.proposal.checklist.writable = False
-    db.proposal.checklist.readable = False
+    #db.proposal.checklist.writable = False
+    #db.proposal.checklist.readable = False
     create_proposal=SQLFORM(db.proposal, rows)
    
     if create_proposal.process().accepted:
