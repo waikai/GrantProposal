@@ -90,25 +90,15 @@ db.define_table(
     Field('owner_', db.auth_user),
     Field('title', label='Proposal Title', requires=[IS_NOT_EMPTY()]),
     Field('funding_agency', requires=IS_IN_SET(['NIH', 'NSF', 'DARPA'], zero='Choose one')),
-#    Field('due_date', 'datetime', default = request.now, requires = IS_DATE(format=('%d-%m-%Y'))), 
     Field('due_date', 'datetime', requires=[IS_NOT_EMPTY(), IS_DATETIME()]),
     Field('investigators'),
-#    Field('checklist'),
     Field('cover_page', requires=IS_IN_SET(['not submitted', 'submitted'], zero='choose one')),
     Field('data_sheet', requires=IS_IN_SET(['not submitted', 'submitted'], zero='choose one')),
     Field('narrative', requires=IS_IN_SET(['not submitted', 'submitted'], zero='choose one')),
     Field('resume', requires=IS_IN_SET(['not submitted', 'submitted'], zero='choose one'))
 )
+
 '''
-# Dan's uncool table
-db.define_table(
-    'checklist'
-    Field('owner_', db.auth_user),
-    Field('cover_page', default='Cover Page'),
-    Field('data_sheet', default='Data Sheet'),
-    Field('narrative', default='Narrative'),
-    Field('resume', default='Resume')
-)
 # Tim's original below
 db.define_table(
     'checklist',

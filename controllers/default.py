@@ -27,10 +27,8 @@ def create_proposal():
 
 #    db.proposal.owner_.writable = False
 #    db.proposal.owner_.readable = False
-#    db.proposal.checklist.writable = False
-#    db.proposal.checklist.readable = False
     create_proposal=SQLFORM(db.proposal, rows)
-   
+    create_proposal.vars.owner_=auth.user.id
     if create_proposal.process().accepted:
         redirect(URL('index'))
         response.flash = 'form accepted'
@@ -49,12 +47,6 @@ def update_proposal():
     db.proposal.id.readable = False 
     db.proposal.owner_.writable = False 
     db.proposal.owner_.readable = False 
-    ''' 
-    db.proposal.cover_page.writable = False 
-    db.proposal.data_sheet.writable = False 
-    db.proposal.narrative.writable = False 
-    db.proposal.resume.writable = False 
-    '''
     update_proposal = SQLFORM(db.proposal, rows)
  
     if update_proposal.process().accepted:
