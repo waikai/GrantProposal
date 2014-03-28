@@ -94,10 +94,10 @@ db.define_table(
     Field('due_date', 'datetime', requires=[IS_NOT_EMPTY(), IS_DATETIME()]),
     Field('investigators'),
 #    Field('checklist'),
-    Field('cover_page', requires=IS_IN_SET(['submitted'], zero='not submitted')),
-    Field('data_sheet', requires=IS_IN_SET(['submitted'], zero='not submitted')),
-    Field('narrative', requires=IS_IN_SET(['submitted'], zero='not submitted')),
-    Field('resume', requires=IS_IN_SET(['submitted'], zero='not submitted'))
+    Field('cover_page', requires=IS_IN_SET(['not submitted', 'submitted'], zero='choose one')),
+    Field('data_sheet', requires=IS_IN_SET(['not submitted', 'submitted'], zero='choose one')),
+    Field('narrative', requires=IS_IN_SET(['not submitted', 'submitted'], zero='choose one')),
+    Field('resume', requires=IS_IN_SET(['not submitted', 'submitted'], zero='choose one'))
 )
 '''
 # Dan's uncool table
