@@ -19,16 +19,13 @@ def display_form():
 def create_proposal():
     if not auth.is_logged_in():
         redirect(URL('user/login'))
-
     rows = db(db.proposal.owner_ == auth.user.id).select(db.proposal.ALL).as_list()
     if len(rows) > 0:
         # FIXME For now, only one proposal is permitted for each user.
         redirect(URL('index'))
 
-#    db.proposal.owner_.writable = False
-#    db.proposal.owner_.readable = False
-    create_proposal=SQLFORM(db.proposal, rows)
-    create_proposal.vars.owner_=auth.user.id
+    create_proposal = SQLFORM(db.proposal, rows)
+    create_proposal.vars.owner_ = auth.user.id
     if create_proposal.process().accepted:
         redirect(URL('index'))
         response.flash = 'form accepted'
@@ -49,9 +46,12 @@ def update_proposal():
     db.proposal.owner_.readable = False 
     update_proposal = SQLFORM(db.proposal, rows)
  
+    investigators = SQLFORM(db.investigators)
+    investigators.vars.owner_ = auth.user.id
+
     if update_proposal.process().accepted:
         redirect(URL('index'))
         response.flash = 'form accepted'
     elif update_proposal.errors:
         response.flash = 'form has errors'
-    return dict(update_proposal=update_proposal)
+    return dict(update_proposal=update_proposal, investigators = investigators)

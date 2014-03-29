@@ -91,11 +91,19 @@ db.define_table(
     Field('title', label='Proposal Title', requires=[IS_NOT_EMPTY()]),
     Field('funding_agency', requires=IS_IN_SET(['NIH', 'NSF', 'DARPA'], zero='Choose one')),
     Field('due_date', 'datetime', requires=[IS_NOT_EMPTY(), IS_DATETIME()]),
-    Field('investigators'),
+#    Field('investigators'),
     Field('cover_page', requires=IS_IN_SET(['not submitted', 'submitted'], zero='choose one')),
     Field('data_sheet', requires=IS_IN_SET(['not submitted', 'submitted'], zero='choose one')),
     Field('narrative', requires=IS_IN_SET(['not submitted', 'submitted'], zero='choose one')),
     Field('resume', requires=IS_IN_SET(['not submitted', 'submitted'], zero='choose one'))
+)
+
+db.define_table(
+    'investigators',
+    Field('owner_', db.auth_user),
+    Field('investigator1', db.auth_user),
+    Field('investigator2', db.auth_user),
+    Field('investigator3', db.auth_user)
 )
 
 '''

@@ -1,3 +1,22 @@
 {{extend 'layout.html'}}
 <h2>Update Proposal</h2>
 {{=update_proposal}}
+
+<form action="#" enctype="multipart/form-data" method="post">
+<ul class="w2p_fw">
+
+<!--
+  <li>Investigator 1: <input class="" name="investigator1" /></li>
+  <li>Investigator 1: <input class="" name="investigator1" /></li>
+  <li>Investigator 1: <input class="" name="investigator1" /></li>
+-->
+
+  <li>Investigator 1: <select class="generic-widget" name="investigator1" ></select></li>
+  <li>Investigator 2: <select class="generic-widget" name="investigator2" ></select></li>
+  <li>Investigator 3: <select class="generic-widget" name="investigator3" ></select></li>
+
+
+</ul>
+  <input style="margin-left:125px;" type="submit" value="Submit" />
+  <input type="hidden" name="_investigators" value="test" />
+</form>
