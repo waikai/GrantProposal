@@ -39,15 +39,15 @@ def update_proposal():
     if not auth.is_logged_in():
         redirect(URL('user/login'))
 
-    rows = db.proposal[auth.user.id]
+    rows_0 = db.proposal[auth.user.id]
     db.proposal.id.writable = False 
     db.proposal.id.readable = False 
     db.proposal.owner_.writable = False 
     db.proposal.owner_.readable = False 
-    update_proposal = SQLFORM(db.proposal, rows)
- 
-    investigators = SQLFORM(db.investigators)
-    investigators.vars.owner_ = auth.user.id
+    update_proposal = SQLFORM(db.proposal, rows_0)
+
+    rows_1 = db.investigators[auth.user.id]
+    investigators = SQLFORM(db.investigators, rows_1)
 
     if update_proposal.process().accepted:
         redirect(URL('index'))
