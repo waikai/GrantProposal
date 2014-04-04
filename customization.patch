@@ -1,0 +1,60 @@
+commit 5ce2530798e96b0d66423ac68352b6b9af9fafc4
+Author: tim <timshen91@gmail.com>
+Date:   Thu Apr 3 23:28:20 2014 -0400
+
+    Tim's grid customization interface.
+
+diff --git a/applications/admin/models/access.py b/applications/admin/models/access.py
+index 823ec43..25f91dd 100644
+--- a/applications/admin/models/access.py
++++ b/applications/admin/models/access.py
+@@ -21,8 +21,8 @@ else:
+ 
+ if request.env.http_x_forwarded_for or request.is_https:
+     session.secure()
+-elif not request.is_local and not DEMO_MODE:
+-    raise HTTP(200, T('Admin is disabled because insecure channel'))
++#elif not request.is_local and not DEMO_MODE:
++#    raise HTTP(200, T('Admin is disabled because insecure channel'))
+ 
+ try:
+     _config = {}
+diff --git a/gluon/sqlhtml.py b/gluon/sqlhtml.py
+index c832fe9..ab3b8e8 100644
+--- a/gluon/sqlhtml.py
++++ b/gluon/sqlhtml.py
+@@ -1863,6 +1863,11 @@ class SQLFORM(FORM):
+              cache_count=None,
+              client_side_delete=False,
+              ignore_common_filters=None,
++
++             custom_create_text=None,
++             custom_create_link=None,
++             custom_edit_text=None,
++             custom_edit_link=None,
+              ):
+ 
+         # jQuery UI ThemeRoller classes (empty if ui is disabled)
+@@ -2258,9 +2263,9 @@ class SQLFORM(FORM):
+         if create:
+             add = gridbutton(
+                 buttonclass='buttonadd',
+-                buttontext=T('Add Record'),
++                buttontext=T(custom_create_text or 'Add Record'),
+                 title=T("Add record to database"),
+-                buttonurl=url(args=['new', tablename]))
++                buttonurl=custom_create_link or url(args=['new', tablename]))
+             if not searchable:
+                 console.append(add)
+         else:
+@@ -2545,8 +2550,8 @@ class SQLFORM(FORM):
+                             url(args=['view', tablename, id])))
+                     if editable and (not callable(editable) or editable(row)):
+                         row_buttons.append(gridbutton(
+-                            'buttonedit', 'Edit',
+-                            url(args=['edit', tablename, id])))
++                            'buttonedit', custom_edit_text or 'Edit',
++                            url(args=['edit', tablename, id]) if not custom_edit_link else custom_edit_link(row)))
+                     if deletable and (not callable(deletable) or deletable(row)):
+                         row_buttons.append(gridbutton(
+                             'buttondelete', 'Delete',

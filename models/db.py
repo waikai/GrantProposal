@@ -96,6 +96,11 @@ db.define_table(
     Field('checklist'),
 )
 
+investigator_fields = ['first_name', 'last_name', 'organization', 'email']
+
+#db.proposal.owner_.readable = False
+#db.proposal.owner_.writable = False
+
 db.define_table(
     'checklist',
     Field('name', unique=True, requires=[IS_NOT_EMPTY(), IS_NOT_IN_DB(db, 'checklist.name')]),
