@@ -97,6 +97,7 @@ db.define_table(
 )
 
 investigator_fields = ['first_name', 'last_name', 'organization', 'email']
+investigator_labels = ['First Name', 'Last Name', 'Organization', 'Email']
 
 #db.proposal.owner_.readable = False
 #db.proposal.owner_.writable = False

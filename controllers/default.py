@@ -84,6 +84,6 @@ def update_proposal():
         form[0].insert(-1, TR(TD(H5('Investigator ' + str(i+1)), _class='w2p_fl')))
         entry = get(investigators, i, [])
         for j in range(len(investigator_fields)):
-            form[0].insert(-1, TR(TD(LABEL(investigator_fields[j]), _class='w2p_fl'), TD(INPUT(_name=investigator_fields[j], _class='string', _type='text', _value=get(entry, j, '')), _class='w2p_fw')))
+            form[0].insert(-1, TR(TD(LABEL(investigator_labels[j]), _class='w2p_fl'), TD(INPUT(_name=investigator_fields[j], _class='string', _type='text', _value=get(entry, j, '')), _class='w2p_fw')))
 
     return dict(form=form)
