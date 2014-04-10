@@ -1,2 +1,16 @@
 {{extend 'layout.html'}}
 {{=form}}
+<script type="text/javascript">
+var count = 1
+function add_inv() {
+        var sbm = document.getElementById('add_inv').parentNode.parentNode
+        var a = document.createElement('tr')
+        a.innerHTML = '{{=inv_header}}'
+        sbm.parentNode.insertBefore(a, sbm)
+        {{for i in inv_entry:}}
+                var a = document.createElement("tr")
+                a.innerHTML = '{{=i, escape=False}}'
+                sbm.parentNode.insertBefore(a, sbm)
+        {{pass}}
+}
+</script>

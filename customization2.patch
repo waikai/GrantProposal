@@ -1,0 +1,32 @@
+commit 6830f98bd469f821dc4cbc67c4a4d432ecd9c72c
+Author: tim <timshen91@gmail.com>
+Date:   Fri Apr 4 12:09:36 2014 -0400
+
+    Comment out stupid GAE specific grid layout code.
+
+diff --git a/gluon/sqlhtml.py b/gluon/sqlhtml.py
+index ab3b8e8..505a7af 100644
+--- a/gluon/sqlhtml.py
++++ b/gluon/sqlhtml.py
+@@ -2429,20 +2429,7 @@ class SQLFORM(FORM):
+         console.append(DIV(message or T('None'),_class='web2py_counter'))
+ 
+         paginator = UL()
+-        if paginate and dbset._db._adapter.dbengine=='google:datastore':
+-            #this means we may have a large table with an unknown number of rows.
+-            try:
+-                page = int(request.vars.page or 1)-1
+-            except ValueError:
+-                page = 0
+-            paginator.append(LI('page %s'%(page+1)))
+-            if next_cursor:
+-                d = dict(page=page+2, cursor=next_cursor)
+-                if order: d['order']=order
+-                if request.vars.keywords: d['keywords']=request.vars.keywords
+-                paginator.append(LI(
+-                    A('next',_href=url(vars=d),cid=request.cid)))
+-        elif paginate and paginate<nrows:
++        if paginate and paginate<nrows:
+             npages, reminder = divmod(nrows, paginate)
+             if reminder:
+                 npages += 1

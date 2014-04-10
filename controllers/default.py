@@ -46,7 +46,8 @@ def update_proposal():
             ll.append([] if not field in _vars else get_list_from_field(_vars[field]))
         if _id == None:
             _vars.owner_ = auth.user.id
-        _vars.investigators = json.dumps(zip(*ll))
+        a = [x for x in zip(*ll) if set(x) != {''}]
+        _vars.investigators = json.dumps(a)
         _vars.checklist = json.dumps(list(set(get_list_from_field(_vars.checklist))))
         _vars = { k : getattr(_vars, k) for k in _vars if k in db.proposal.fields and k != 'id' }
         if _id == None:
@@ -66,7 +67,7 @@ def update_proposal():
     tmp.remove('owner_')
     tmp.remove('investigators')
     tmp.remove('checklist')
-    form = SQLFORM(db.proposal, _vars, showid=False, fields=tmp)
+    form = SQLFORM(db.proposal, _vars, showid=False, fields=tmp, _id='proposal_form')
 
     def get(l, index, default):
         if (type(l) is list and index < len(l)) or index in l:
@@ -80,10 +81,17 @@ def update_proposal():
             form[0].insert(-1, TR(TD(LABEL(name), _class='w2p_fl'), TD(INPUT(_name='checklist', _class='checkbox', _type='checkbox', _value=name, _checked='checked' if name in checklist else None), _class='w2p_fw')))
 
     investigators = get(_vars, 'investigators', [])
-    for i in range(5):
-        form[0].insert(-1, TR(TD(H5('Investigator ' + str(i+1)), _class='w2p_fl')))
-        entry = get(investigators, i, [])
+
+    inv_entry = []
+    for j in range(len(investigator_fields)):
+        inv_entry.append(str(TD(LABEL(investigator_labels[j]), _class='w2p_fl'))+str(TD(INPUT(_name=investigator_fields[j], _class='string', _type='text'), _class='w2p_fw')))
+
+    for i in range(len(investigators)):
+        form[0].insert(-1, TR(TD(H5('Investigator'), _class='w2p_fl')))
+        entry = investigators[i]
         for j in range(len(investigator_fields)):
             form[0].insert(-1, TR(TD(LABEL(investigator_labels[j]), _class='w2p_fl'), TD(INPUT(_name=investigator_fields[j], _class='string', _type='text', _value=get(entry, j, '')), _class='w2p_fw')))
 
-    return dict(form=form)
+    form[0].insert(-1, DIV('Add an investiator', _id='add_inv', _class='btn', _onclick='add_inv()'))
+
+    return dict(form=form, inv_entry=inv_entry, inv_header=TD(H5('Investigator'), _class='w2p_fl'))
