@@ -1,0 +1,156 @@
+timestamp: 2014-04-16T19:26:28.721801
+CREATE TABLE auth_user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first_name CHAR(128),
+    last_name CHAR(128),
+    email CHAR(512),
+    password CHAR(512),
+    registration_key CHAR(512),
+    reset_password_key CHAR(512),
+    registration_id CHAR(512),
+    employer CHAR(512)
+);
+success!
+timestamp: 2014-04-16T19:26:28.760421
+CREATE TABLE auth_group(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    role CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2014-04-16T19:26:28.785881
+CREATE TABLE auth_membership(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2014-04-16T19:26:28.810251
+CREATE TABLE auth_permission(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_id INTEGER REFERENCES auth_group (id) ON DELETE CASCADE,
+    name CHAR(512),
+    table_name CHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2014-04-16T19:26:28.829866
+CREATE TABLE auth_event(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time_stamp TIMESTAMP,
+    client_ip CHAR(512),
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    origin CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2014-04-16T19:26:28.855743
+CREATE TABLE auth_cas(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    created_on TIMESTAMP,
+    service CHAR(512),
+    ticket CHAR(512),
+    renew CHAR(1)
+);
+success!
+timestamp: 2014-04-16T19:26:28.883012
+CREATE TABLE proposal(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    owner_ INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    title CHAR(512),
+    funding_agency CHAR(512),
+    due_date TIMESTAMP,
+    cover_page CHAR(512),
+    data_sheet CHAR(512),
+    narrative CHAR(512),
+    resume CHAR(512)
+);
+success!
+timestamp: 2014-04-16T19:26:28.914802
+CREATE TABLE investigators(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    owner_ INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    investigator1 INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    investigator2 INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    investigator3 INTEGER REFERENCES auth_user (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2014-04-16T19:38:30.431428
+ALTER TABLE proposal ADD checklist CHAR(512);
+timestamp: 2014-04-16T19:38:30.477079
+ALTER TABLE proposal ADD investigators CHAR(512);
+success!
+timestamp: 2014-04-16T19:38:30.507191
+CREATE TABLE checklist(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512) UNIQUE
+);
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!

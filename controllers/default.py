@@ -21,7 +21,15 @@ def user():
     form = auth()
     return locals()
 
+
 @auth.requires_login()
+def admini():
+    if auth.user.id != 1:
+        redirect(URL('index'))
+
+    form = db(db.proposal.id > 0).select()
+    return dict(form=form)
+
 def update_proposal():
     _id = None
     if len(request.args) > 0:
