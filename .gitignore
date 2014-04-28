@@ -5,3 +5,6 @@ languages/
 private/
 sessions/
 uploads/
+.gitignore
+modules/__init__.pyc
+__init__.py
