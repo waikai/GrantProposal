@@ -5,31 +5,37 @@ from gluon.storage import Storage
 
 @auth.requires_login()
 def index():
-    grid = SQLFORM.grid(
-        db.proposal.owner_ == auth.user.id,
-        fields=[db.proposal.title, db.proposal.funding_agency, db.proposal.due_date],
-        csv=False,
-        details=False,
-        searchable=False,
-        custom_create_text='Create Proposal',
-        custom_create_link=URL('update_proposal'),
-        custom_edit_link=lambda row: URL('update_proposal', args=str(row['id'])),
-    )
-    return locals()
+	if auth.user.id == 1:
+		grid = SQLFORM.grid(
+			db.proposal.owner_,
+			fields=[db.proposal.title, db.proposal.funding_agency, db.proposal.due_date],
+			csv=False,
+			details=False,
+			searchable=False,
+			custom_create_text='Create Proposal',
+			custom_create_link=URL('update_proposal'),
+			custom_edit_link=lambda row: URL('update_proposal', args=str(row['id'])),
+		)
+		return locals()
+	
+	else:
+		grid = SQLFORM.grid(
+			db.proposal.owner_ == auth.user.id,
+			fields=[db.proposal.title, db.proposal.funding_agency, db.proposal.due_date],
+			csv=False,
+			details=False,
+			searchable=False,
+			custom_create_text='Create Proposal',
+			custom_create_link=URL('update_proposal'),
+			custom_edit_link=lambda row: URL('update_proposal', args=str(row['id'])),
+		)
+		return locals()
 
 def user():
     form = auth()
     return locals()
 
-
 @auth.requires_login()
-def admini():
-    if auth.user.id != 1:
-        redirect(URL('index'))
-
-    form = db(db.proposal.id > 0).select()
-    return dict(form=form)
-
 def update_proposal():
     _id = None
     if len(request.args) > 0:
@@ -39,7 +45,7 @@ def update_proposal():
 
     if _id != None:
         rows = db(db.proposal.id == _id).select(db.proposal.owner_)
-        if len(rows) == 0 or rows[0]['owner_'] != auth.user.id:
+        if len(rows) == 0 or rows[0]['owner_'] != auth.user.id and auth.user.id != 1:
             redirect(URL('index'))
 
     def get_list_from_field(a):
