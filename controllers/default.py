@@ -5,7 +5,7 @@ from gluon.storage import Storage
 
 @auth.requires_login()
 def index():
-	if auth.user.id == 1:
+	if auth.user.email == "admin@nyit.edu":
 		grid = SQLFORM.grid(
 			db.proposal.owner_,
 			fields=[db.proposal.title, db.proposal.funding_agency, db.proposal.due_date],
@@ -45,7 +45,7 @@ def update_proposal():
 
     if _id != None:
         rows = db(db.proposal.id == _id).select(db.proposal.owner_)
-        if len(rows) == 0 or rows[0]['owner_'] != auth.user.id and auth.user.id != 1:
+        if len(rows) == 0 or rows[0]['owner_'] != auth.user.id and auth.user.email != "admin@nyit.edu":
             redirect(URL('index'))
 
     def get_list_from_field(a):
