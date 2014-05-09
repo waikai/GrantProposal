@@ -92,7 +92,7 @@ def update_proposal():
         checklist = get(_vars, 'checklist', [])
         for option in db().select(db.checklist.name):
             name = option['name']
-            form[0].insert(-1, TR(TD(LABEL(name), _class='w2p_fl'), TD(INPUT(_name='checklist', _class='checkbox', _type='checkbox', _value=name, _checked='checked' if name in checklist else None), _class='w2p_fw')))
+            form[0].insert(-1, TR(TD(LABEL(name), _class='w2p_fl'), TD(INPUT(_name='checklist', _class='upload', _type='file', _value=name, _checked='checked' if name in checklist else None), _class='w2p_fw')))
 
     investigators = get(_vars, 'investigators', [])
 
