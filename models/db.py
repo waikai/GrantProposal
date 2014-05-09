@@ -94,6 +94,8 @@ db.define_table(
     Field('due_date', 'datetime', requires=[IS_NOT_EMPTY(), IS_DATETIME()]),
     Field('investigators'),
     Field('checklist'),
+    Field('Resume', 'upload',requires=[IS_NOT_EMPTY()]),
+    Field('Coverpage', 'upload',requires=[IS_NOT_EMPTY()])
 )
 
 investigator_fields = ['first_name', 'last_name', 'organization', 'email']
@@ -106,11 +108,11 @@ db.define_table(
     'checklist',
     Field('name', unique=True, requires=[IS_NOT_EMPTY(), IS_NOT_IN_DB(db, 'checklist.name')]),
 )
-
+"""
 if len(db().select(db.checklist.ALL)) == 0:
     db.checklist.insert(name='Cover Page')
     db.checklist.insert(name='Data Sheet')
     db.checklist.insert(name='Narrative')
     db.checklist.insert(name='Resume')
-
+"""
 crud.settings.auth = auth
